@@ -5,8 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
+import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -151,11 +153,18 @@ public class ProdottoDao implements ProdottoDaoInterfaccia{
 
 		ArrayList<ProdottoBean> products = new ArrayList<ProdottoBean>();
 
-		String selectSQL = "SELECT * FROM " + ProdottoDao.TABLE_NAME;
+		String selectSQL = "SELECT * FROM " + ProdottoDao.TABLE_NAME;	
+		
+		// Definisci una lista di colonne valide
+	    List<String> validColumns = Arrays.asList("ID_PRODOTTO", "NOME", "DESCRIZIONE", "PREZZO", "QUANTITA", 
+	                                              "PIATTAFORMA", "IVA", "DATA_USCITA", "IN_VENDITA", 
+	                                              "IMMAGINE", "GENERE", "DESCRIZIONE_DETTAGLIATA");
 
-		if (order != null && !order.equals("")) {
-			selectSQL += " ORDER BY " + order;
-		}
+	    // Verifica se il parametro 'order' è valido
+	    if (order != null && !order.equals("") && validColumns.contains(order.toUpperCase())) {
+	        selectSQL += " ORDER BY " + order;
+	    }
+		
 
 		try {
 			connection = ds.getConnection();
